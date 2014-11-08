@@ -8,6 +8,15 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
+/**
+ * go to
+ * https://github.com/r4ccoon/javaFBPMosquittoComponent
+ * to get the PAHO mosquittos jar files (java libs that are needed)
+ *
+ * to install mosquitto, on osx-> brew install mosquitto
+ * on windows and linux , http://mosquitto.org/download/ and follow the instructions
+ */
+
 @ComponentDescription("Generate stream of packets from I/O file")
 @OutPort(value = "OUT", description = "Generated packets", type = String.class)
 @InPorts({
@@ -22,13 +31,16 @@ public class Mosquitto extends Component{
     private InputPort content;
     private InputPort topic;
 
+    private OutputPort outport;
+
+    // some default values, will be overridden later
     private String _topic        = "heartbeat";
     private String _content      = "beat";
     private String _clientId     = "client_id_";
 
+    // some values that is not necessary to change
     private int qos             = 2;
     private String broker       = "tcp://localhost:1883";
-    private OutputPort outport;
 
     public Object checkInputs(InputPort inPort) throws Exception {
         Packet rp = inPort.receive();
@@ -85,7 +97,6 @@ public class Mosquitto extends Component{
             sampleClient.disconnect();
             System.out.println("Disconnected");
 
-            System.exit(0);
         } catch(MqttException me) {
             System.out.println("reason "+me.getReasonCode());
             System.out.println("msg "+me.getMessage());

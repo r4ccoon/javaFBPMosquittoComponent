@@ -13,8 +13,9 @@ import com.jpmorrsn.fbp.engine.Packet;
 @InPorts({
     @InPort(value = "CAR"),
 	@InPort(value = "COMMAND", type = Boolean.class),
-	@InPort(value = "FROM"),
-	@InPort(value = "TO")})
+	//@InPort(value = "FROM"),
+	//@InPort(value = "TO")
+})
 
 @OutPorts({
     @OutPort(value = "STATE", type = Boolean.class),
@@ -25,21 +26,20 @@ import com.jpmorrsn.fbp.engine.Packet;
 })
 
 public class Robot extends Component {
-
-	private OutputPort outportstate, outportcar/*, outportstatelog, outportdata, outportcarlog*/;
-
-	private InputPort inportcar, inportcommand, inportfrom, inportto;
+	private InputPort inportcar, inportcommand ;
 
 	private int from;
 	private int to;
+
     private OutputPort outportstatelog;
     private OutputPort outportdata;
     private OutputPort outportcarlog;
+    private OutputPort outportstate;
+    private OutputPort outportcar;
 
     @Override
 	protected void execute() throws Exception {
-		// TODO Auto-generated method stub
-		
+        /*
 		Packet ip;
 		ip = inportfrom.receive();
 		from = Integer.parseInt((String)ip.getContent());
@@ -48,10 +48,10 @@ public class Robot extends Component {
 		ip = inportto.receive();
 		to = Integer.parseInt((String)ip.getContent());
 		drop(ip);
-		
+		*/
+
 		Packet carpacket;
-		while((carpacket = inportcar.receive())!=null){
-			
+		while((carpacket = inportcar.receive()) != null){
 			int car = Integer.parseInt((String)carpacket.getContent());
 			drop(carpacket);
 			
@@ -96,15 +96,12 @@ public class Robot extends Component {
 
 	@Override
 	protected void openPorts() {
-		// TODO Auto-generated method stub
 		inportcar = openInput("CAR");
 		inportcommand = openInput("COMMAND");
-		inportto = openInput("TO");
-		inportfrom = openInput("FROM");
 		
 		outportcar = openOutput("CAR");
-
 		outportcarlog = openOutput("CARLOG");
+
 		outportdata = openOutput("SENSORDATA");
 
 		outportstate = openOutput("STATE");

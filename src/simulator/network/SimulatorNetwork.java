@@ -26,6 +26,7 @@ public class SimulatorNetwork extends Network {
         connect(component("robot1"), port("CAR"), component("robot2"), port("CAR"));
         connect(component("robot2"), port("CAR"), component("robot3"), port("CAR"));
         connect(component("robot3"), port("CAR"), component("robot4"), port("CAR"));
+        connect(component("robot4"), port("CAR"), component("Write", WriteToConsole.class), port("IN"));
 
         // state manager connections
         connect(component("stateManager"), port("GENERATE"), component("carGenerator"), port("STATE"));
@@ -62,6 +63,11 @@ public class SimulatorNetwork extends Network {
         connect(component("robot2"), port("CARLOG"), component("postBot2"), port("CARID"));
         connect(component("robot3"), port("CARLOG"), component("postBot3"), port("CARID"));
         connect(component("robot4"), port("CARLOG"), component("postBot4"), port("CARID"));
+
+        initialize("robot1", component("postBot1"), port("ROBOTID"));
+        initialize("robot2", component("postBot2"), port("ROBOTID"));
+        initialize("robot3", component("postBot3"), port("ROBOTID"));
+        initialize("robot4", component("postBot4"), port("ROBOTID"));
 
         // mosquittos..
         component("mos", Mosquitto.class);

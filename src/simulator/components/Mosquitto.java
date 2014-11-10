@@ -18,7 +18,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
  */
 
 @ComponentDescription("publish a message to the mosquitto server")
-@OutPort(value = "OUT", description = "Generated packets", type = String.class)
+
 @InPorts({
     @InPort(value = "CLIENTID", description = "client id of the client, can put random string here", type = String.class, optional = true),
     @InPort(value = "CONTENT", description = "the contents", type = String.class),
@@ -78,12 +78,6 @@ public class Mosquitto extends Component{
             System.out.println("excerpt "+me);
             me.printStackTrace();
         }
-
-        // i m not sure what to OUT yet, so "TEST"
-        Packet p = create("TEST");
-        if (!outport.isClosed()) {
-            outport.send(p);
-        }
     }
 
     @Override
@@ -91,7 +85,5 @@ public class Mosquitto extends Component{
         clientId = openInput("CLIENTID");
         content =  openInput("CONTENT");
         topic =  openInput("TOPIC");
-
-        outport = openOutput("OUT");
     }
 }

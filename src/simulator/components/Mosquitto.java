@@ -17,12 +17,12 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
  * on windows and linux , http://mosquitto.org/download/ and follow the instructions
  */
 
-@ComponentDescription("Generate stream of packets from I/O file")
+@ComponentDescription("publish a message to the mosquitto server")
 @OutPort(value = "OUT", description = "Generated packets", type = String.class)
 @InPorts({
-    @InPort(value = "CLIENTID", description = "a", type = String.class, optional = true),
-    @InPort(value = "CONTENT", description = "a", type = String.class),
-    @InPort(value = "TOPIC", description = "a", type = String.class)
+    @InPort(value = "CLIENTID", description = "client id of the client, can put random string here", type = String.class, optional = true),
+    @InPort(value = "CONTENT", description = "the contents", type = String.class),
+    @InPort(value = "TOPIC", description = "topic", type = String.class)
 })
 
 public class Mosquitto extends Component{
@@ -42,40 +42,13 @@ public class Mosquitto extends Component{
     private int qos             = 2;
     private String broker       = "tcp://localhost:1883";
 
-    public Object checkInputs(InputPort inPort) throws Exception {
-        Packet rp = inPort.receive();
-        if (rp == null) {
-            throw new Exception("we need TOPIC");
-        }
-
-        inPort.close();
-        return rp.getContent();
-    }
-
-    /**
-     * return the packet content if not null, otherwise return the default value
-     *
-     * @param inPort
-     * @param defaultValue
-     * @return
-     */
-    public Object fillInput(InputPort inPort, Object defaultValue){
-        Packet rp = inPort.receive();
-        if (rp == null) {
-            return defaultValue;
-        }
-
-        inPort.close();
-        return rp.getContent();
-    }
-
     @Override
     protected void execute() throws Exception {
         MemoryPersistence persistence = new MemoryPersistence();
 
-        _topic = (String) checkInputs(topic);
-        _content = (String) checkInputs(content);
-        _clientId = (String) fillInput(clientId, _clientId);
+        _topic = (String) Helper.checkInput(topic);
+        _content = (String) Helper.checkInput(content);
+        _clientId = (String) Helper.fillInput(clientId, _clientId);
 
         try {
             // connect to mqtt server, make sure that the server is on

@@ -48,15 +48,20 @@ public class SimulatorNetwork extends Network {
         component("postBot3", PostBot.class);
         component("postBot4", PostBot.class);
         // robot to postbots state data
-        connect(component("robot1"), port("STATE"), component("postBot1"), port("STATE"));
-        connect(component("robot2"), port("STATE"), component("postBot2"), port("STATE"));
-        connect(component("robot3"), port("STATE"), component("postBot3"), port("STATE"));
-        connect(component("robot4"), port("STATE"), component("postBot4"), port("STATE"));
+        connect(component("robot1"), port("STATELOG"), component("postBot1"), port("STATE"));
+        connect(component("robot2"), port("STATELOG"), component("postBot2"), port("STATE"));
+        connect(component("robot3"), port("STATELOG"), component("postBot3"), port("STATE"));
+        connect(component("robot4"), port("STATELOG"), component("postBot4"), port("STATE"));
         // robot to postbots send power data
         connect(component("robot1"), port("SENSORDATA"), component("postBot1"), port("POWER"));
         connect(component("robot2"), port("SENSORDATA"), component("postBot2"), port("POWER"));
         connect(component("robot3"), port("SENSORDATA"), component("postBot3"), port("POWER"));
         connect(component("robot4"), port("SENSORDATA"), component("postBot4"), port("POWER"));
+        // car log
+        connect(component("robot1"), port("CARLOG"), component("postBot1"), port("CARID"));
+        connect(component("robot2"), port("CARLOG"), component("postBot2"), port("CARID"));
+        connect(component("robot3"), port("CARLOG"), component("postBot3"), port("CARID"));
+        connect(component("robot4"), port("CARLOG"), component("postBot4"), port("CARID"));
 
         // mosquittos..
         component("mos", Mosquitto.class);

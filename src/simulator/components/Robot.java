@@ -10,16 +10,19 @@ import com.jpmorrsn.fbp.engine.OutputPort;
 import com.jpmorrsn.fbp.engine.Packet;
 
 
-@InPorts({ @InPort(value = "CAR"),
+@InPorts({
+    @InPort(value = "CAR"),
 	@InPort(value = "COMMAND", type = Boolean.class),
 	@InPort(value = "FROM"),
 	@InPort(value = "TO")})
 
-@OutPorts({ @OutPort(value = "STATE", type = Boolean.class),
+@OutPorts({
+    @OutPort(value = "STATE", type = Boolean.class),
 	@OutPort(value = "CAR"),
-	/*@OutPort(value = "STATELOG", type = Boolean.class),
+	@OutPort(value = "STATELOG", type = Boolean.class),
 	@OutPort(value = "SENSORDATA"),
-	@OutPort(value = "CARLOG")*/})
+	@OutPort(value = "CARLOG")
+})
 
 public class Robot extends Component {
 
@@ -29,8 +32,11 @@ public class Robot extends Component {
 
 	private int from;
 	private int to;
-	
-	@Override
+    private OutputPort outportstatelog;
+    private OutputPort outportdata;
+    private OutputPort outportcarlog;
+
+    @Override
 	protected void execute() throws Exception {
 		// TODO Auto-generated method stub
 		
@@ -97,11 +103,12 @@ public class Robot extends Component {
 		inportfrom = openInput("FROM");
 		
 		outportcar = openOutput("CAR");
-/*		outportcarlog = openOutput("CARLOG");
+
+		outportcarlog = openOutput("CARLOG");
 		outportdata = openOutput("SENSORDATA");
-*/
+
 		outportstate = openOutput("STATE");
-//		outportstatelog = openOutput("STATELOG");
+		outportstatelog = openOutput("STATELOG");
 
 	}
 

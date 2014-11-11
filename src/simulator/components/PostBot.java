@@ -31,10 +31,10 @@ public class PostBot extends Component {
 
     @Override
     protected void execute() throws Exception {
-        _robotId = (String) Helper.checkInput(robotId);
-        _carId   = (String) Helper.checkInput(carId);
-        _power   = (Double) Helper.checkInput(power);
-        _state   = (Boolean) Helper.checkInput(state);
+        _robotId = (String) Helper.checkInput(robotId).getContent();
+        _carId   = (String) Helper.checkInput(carId).getContent();
+        _power   = (Double) Helper.checkInput(power).getContent();
+        _state   = (Boolean) Helper.checkInput(state).getContent();
 
         if(_carId == null)
             _carId = "_carId";

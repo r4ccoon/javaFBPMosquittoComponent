@@ -8,14 +8,14 @@ import com.jpmorrsn.fbp.engine.Packet;
  */
 public class Helper {
 
-    public static Object checkInput(InputPort inPort) throws Exception {
+    public static Packet checkInput(InputPort inPort) throws Exception {
         Packet rp = inPort.receive();
         if (rp == null) {
             return null;
         }
 
         inPort.close();
-        return rp.getContent();
+        return rp;
     }
 
     /**

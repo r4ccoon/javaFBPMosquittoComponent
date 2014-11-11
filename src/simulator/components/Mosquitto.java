@@ -46,8 +46,8 @@ public class Mosquitto extends Component{
     protected void execute() throws Exception {
         MemoryPersistence persistence = new MemoryPersistence();
 
-        _topic = (String) Helper.checkInput(topic);
-        _content = (String) Helper.checkInput(content);
+        _topic = (String) Helper.checkInput(topic).getContent();
+        _content = (String) Helper.checkInput(content).getContent();
         _clientId = (String) Helper.fillInput(clientId, _clientId);
 
         try {

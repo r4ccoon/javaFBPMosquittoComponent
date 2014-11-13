@@ -1,14 +1,28 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<script type="text/javascript" src="websocket.js"> 
-</script>
-<script type="text/javascript">
-App.Run();
-</script>
+<script type="text/javascript" src="Chart.min.js"></script>
+<script type="text/javascript" src="websocket.js"></script>
 </head>
 <body>
-<div id="sse"> 
-</div>
+<h3>Robot 1</h3>
+<canvas id="robot1" width="600" height="400"></canvas>
+<p>Average = <div id="avgr1"></div></p>
+<h3>Robot 2</h3>
+<canvas id="robot2" width="600" height="400"></canvas>
+<p>
+    Average = <div id="avgr2"></div>
+</p>
+<h3>Robot 3</h3>
+<canvas id="robot3" width="600" height="400"></canvas>
+<p>Average = <div id="avgr3"></div></p>
+<h3>Robot 4</h3>
+<canvas id="robot4" width="600" height="400"></canvas>
+<p>Average = <div id="avgr4"></div></p>
+
+<script type="text/javascript">
+    App.Construct();
+    App.Run();
+</script>
 </body>
 </html>

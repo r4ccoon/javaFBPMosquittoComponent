@@ -6,46 +6,53 @@ import com.jpmorrsn.fbp.engine.*;
         @InPort(value = "SWITCH"),
         @InPort(value = "RANGEBEGIN"),
         @InPort(value = "RANGEEND"),
+        @InPort(value = "PROCESSTIME"),
 })
 
 @OutPorts({
-        @OutPort(value = "SENSORDATA", optional = true)
+        @OutPort(value = "SENSORDATA", optional = true),
+        @OutPort(value = "STATE", optional = true)
 })
 
 public class PowerManager extends Component {
     private InputPort inPortSwitch;
     private InputPort inPortRangeBegin;
     private InputPort inPortRangeEnd;
+    private InputPort inProcessTime;
 
     private OutputPort outportdata;
-
-    private Integer rangeBegin;
-    private Integer rangeEnd;
+    private OutputPort outportstate;
 
     @Override
     protected void execute() throws Exception {
-        Packet pRangeBegin = Helper.checkInput(inPortRangeBegin);
-        Packet pRangeEnd = Helper.checkInput(inPortRangeEnd);
+        Packet pRangeBegin = checkInput(inPortRangeBegin);
+        Packet pRangeEnd = checkInput(inPortRangeEnd);
 
-        rangeBegin = (Integer) pRangeBegin.getContent();
-        rangeEnd = (Integer) pRangeEnd.getContent();
+        Integer rangeBegin = (Integer) pRangeBegin.getContent();
+        Integer rangeEnd = (Integer) pRangeEnd.getContent();
 
+        Packet pp = inProcessTime.receive();
+        long processTime = (Integer)pp.getContent();
+        processTime = processTime * 1000000;
+
+        drop(pp);
         drop(pRangeBegin);
         drop(pRangeEnd);
 
         Packet pInSwitch;
         while ((pInSwitch = inPortSwitch.receive()) != null)
         {
-            long processTime = (Integer)pInSwitch.getContent();
-            processTime = processTime * 1000000;
             drop(pInSwitch);
 
             long startTime = System.nanoTime();
 
+            // we will send the data to the mqtt
+            outportstate.send(create(true));
+
             do
             {
                 if(System.nanoTime() - startTime >= processTime){
-                    //System.out.println("power finished");
+                    System.out.println("power finished");
                     break;
                 }
 
@@ -53,15 +60,14 @@ public class PowerManager extends Component {
                 Integer randomEnergy = rangeBegin + (int) (Math.random() * rangeEnd);
 
                 // we will send the data to the mqtt
-                Packet out = create(randomEnergy);
-                outportdata.send(out);
+                outportdata.send(create(randomEnergy));
 
-                //System.out.println("using power " + randomEnergy);
-
-                drop(out);
-
-                sleep(1000);
+                System.out.println("using power " + randomEnergy);
+                Thread.sleep(1000);
             } while (true);
+
+            // we will send the data to the mqtt
+            outportstate.send(create(false));
         }
 
     }
@@ -69,9 +75,20 @@ public class PowerManager extends Component {
     @Override
     protected void openPorts() {
         inPortSwitch = openInput("SWITCH");
+        inProcessTime = openInput("PROCESSTIME");
         inPortRangeBegin = openInput("RANGEBEGIN");
         inPortRangeEnd = openInput("RANGEEND");
 
         outportdata = openOutput("SENSORDATA");
+        outportstate = openOutput("STATE");
+    }
+
+    public Packet checkInput(InputPort inPort) throws Exception {
+        Packet rp = inPort.receive();
+        if (rp == null) {
+            return null;
+        }
+
+        return rp;
     }
 }

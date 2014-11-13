@@ -44,10 +44,10 @@ public class SimulatorNetwork extends Network {
         connect(component("stateManager"), port("MOVE4"), component("robot4"), port("COMMAND"));
 
         // robot to postbot
-        component("postBot1", PostBot.class);
-        component("postBot2", PostBot.class);
-        component("postBot3", PostBot.class);
-        component("postBot4", PostBot.class);
+        component("postBot1", PostBotPower.class);
+        component("postBot2", PostBotPower.class);
+        component("postBot3", PostBotPower.class);
+        component("postBot4", PostBotPower.class);
         // robot to postbots state data
         connect(component("robot1"), port("STATELOG"), component("postBot1"), port("STATE"));
         connect(component("robot2"), port("STATELOG"), component("postBot2"), port("STATE"));
@@ -63,11 +63,6 @@ public class SimulatorNetwork extends Network {
         connect(component("robot2"), port("CARLOG"), component("postBot2"), port("CARID"));
         connect(component("robot3"), port("CARLOG"), component("postBot3"), port("CARID"));
         connect(component("robot4"), port("CARLOG"), component("postBot4"), port("CARID"));
-
-        initialize("robot1", component("postBot1"), port("ROBOTID"));
-        initialize("robot2", component("postBot2"), port("ROBOTID"));
-        initialize("robot3", component("postBot3"), port("ROBOTID"));
-        initialize("robot4", component("postBot4"), port("ROBOTID"));
 
         // mosquittos..
         component("mos", Mosquitto.class);

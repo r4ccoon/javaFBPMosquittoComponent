@@ -1,11 +1,10 @@
 package simulator.network;
 
 import com.jpmorrsn.fbp.components.Passthru;
-import com.jpmorrsn.fbp.components.WriteToConsole;
 import com.jpmorrsn.fbp.engine.Network;
 import simulator.components.Garage;
-import simulator.components.PowerManager;
 import simulator.components.RCarGenerator;
+import simulator.components.RRobot;
 
 public class RSimulatorNetwork extends Network {
 
@@ -20,17 +19,13 @@ public class RSimulatorNetwork extends Network {
         component("robot3", RRobot.class);
         component("robot4", RRobot.class);
 
-        initialize("robot1", component("robot1"), port("ROBOTNAME"));
-        initialize("robot2", component("robot2"), port("ROBOTNAME"));
-        initialize("robot3", component("robot3"), port("ROBOTNAME"));
-        initialize("robot4", component("robot4"), port("ROBOTNAME"));
-
         // the proces time in ms
         initialize(3000, component("robot1"), port("PROCESSTIME"));
         initialize(4000, component("robot2"), port("PROCESSTIME"));
-        initialize(5000, component("robot3"), port("PROCESSTIME"));
-        initialize(6000, component("robot4"), port("PROCESSTIME"));
+        initialize(1000, component("robot3"), port("PROCESSTIME"));
+        initialize(2000, component("robot4"), port("PROCESSTIME"));
 
+        /*
         component("powerManager1", PowerManager.class);
         component("powerManager2", PowerManager.class);
         component("powerManager3", PowerManager.class);
@@ -45,15 +40,20 @@ public class RSimulatorNetwork extends Network {
         initialize(100, component("powerManager3"), port("RANGEEND"));
         initialize(20 , component("powerManager4"), port("RANGEBEGIN"));
         initialize(100, component("powerManager4"), port("RANGEEND"));
-
+        */
         // car generator to 1st robot
         connect(component("carGenerator"), port("CAR"), component("robot1"), port("CAR"));
 
         // 1st robot to car generator
         // it use passthru because somehow error if not used
-        component("Passthru", Passthru.class);
-        initialize(Boolean.TRUE, component("Passthru"), port("IN"));
-        connect(component("Passthru"), port("OUT"), component("carGenerator"), port("COMMAND"));
+        //component("Passthru1", Passthru.class);
+        //initialize(Boolean.TRUE, component("Passthru1"), port("IN"));
+        //connect(component("Passthru1"), port("OUT"), component("carGenerator"), port("COMMAND"));
+
+        // it use passthru because somehow error if not used
+        component("Passthru2", Passthru.class);
+        initialize(Boolean.TRUE, component("Passthru2"), port("IN"));
+        connect(component("Passthru2"), port("OUT"), component("robot4"), port("COMMAND"));
 
         connect(component("robot1"), port("COMMAND"), component("carGenerator"), port("COMMAND"));
         connect(component("robot2"), port("COMMAND"), component("robot1"), port("COMMAND"));
@@ -64,13 +64,19 @@ public class RSimulatorNetwork extends Network {
         connect(component("robot1"), port("CAR"), component("robot2"), port("CAR"));
         connect(component("robot2"), port("CAR"), component("robot3"), port("CAR"));
         connect(component("robot3"), port("CAR"), component("robot4"), port("CAR"));
+
+        //component("Passthru1", Passthru.class);
+        //connect(component("robot3"), port("CAR"), component("Passthru1"), port("IN"));
+        //connect(component("Passthru1"), port("OUT"), component("robot4"), port("CAR"));
         connect(component("robot4"), port("CAR"), component("Finished", Garage.class), port("CAR"));
 
         // robots to power manager
+        /*
         connect(component("robot1"), port("STATELOG"), component("powerManager1"), port("SWITCH"));
         connect(component("robot2"), port("STATELOG"), component("powerManager2"), port("SWITCH"));
         connect(component("robot3"), port("STATELOG"), component("powerManager3"), port("SWITCH"));
         connect(component("robot4"), port("STATELOG"), component("powerManager4"), port("SWITCH"));
+        */
     }
 
     public static void main(final String[] argv) throws Exception {

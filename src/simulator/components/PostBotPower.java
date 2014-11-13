@@ -38,7 +38,7 @@ public class PostBotPower extends Component {
             _power = po.getContent();
             drop(po);
 
-            topicOut.send(create("/" + _robotId ));
+            topicOut.send(create( _robotId ));
             contentOut.send(create(_power + "|" + _carId));
 
             System.out.println("power forwarded");

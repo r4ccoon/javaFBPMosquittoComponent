@@ -46,8 +46,8 @@ public class MosquittoJavaFBPExample extends Network {
             connect(component("passThru" +i+ "sc"), port("OUT"),   component("mos"), port("CONTENT"));
              // turn this things on
             initialize(true, component("powerManager" + i), port("SWITCH"));
-            initialize(10000, component("powerManager" + i), port("PROCESSTIME"));
-        } 
+            initialize(1000000, component("powerManager" + i), port("PROCESSTIME"));
+        }
     }
 
     public static void main(final String[] argv) throws Exception {

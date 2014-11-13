@@ -14,9 +14,9 @@ var App = {
     timeSpan: 60,
 
     Construct: function(){
-        for(var i = 0;i < this.timeSpan;i++){
+        for(var i = this.timeSpan;i > 0;i--){
             if(i%4==0){
-                this.labels.push(i + 1);
+                this.labels.push(i);
             }else
                 this.labels.push("");
 
